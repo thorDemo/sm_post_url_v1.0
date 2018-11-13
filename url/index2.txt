@@ -1,0 +1,10 @@
+fangchan/
+zhaopin/
+ershou/
+jiaoyou/
+shenghuo/
+blog/
+qiye/
+news/
+keji/
+bbs/
