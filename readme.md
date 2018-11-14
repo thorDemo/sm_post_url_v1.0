@@ -15,6 +15,7 @@
     post_num_every_index = 2000                     # 每次每个目录推送多少条数据，最大值是2000 <br>
     post_frequency = 10                             # 推送延迟每隔离多少分钟推送一次,单位分钟 m <br>
   </code>
+* 列表页配置目录 /url/index.txt
 
 * 安装环境需求 python3.6 anaconda3/2
 
