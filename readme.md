@@ -49,3 +49,8 @@
       conda install subprocess
   </code>
   
+* 启动程序命令
+
+  <code>
+      python -u post_something.py > post.log 2>&1 &
+  </code>
