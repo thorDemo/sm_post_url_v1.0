@@ -10,8 +10,6 @@ import time
 # 参数定义
 # ————————————
 post_url_path = 'url/token.txt'                 # 推送哪些url
-post_num_every_index = 2000                     # 每次每个目录推送多少条数据，最大值是2000
-post_frequency = 10                             # 推送延迟每隔离多少分钟推送一次,单位分钟 m
 # ————————————
 # ————————————
 logger = logging.getLogger(__name__)            # 日志配置
@@ -35,21 +33,31 @@ def rand_char():
     return ''.join(sample(char, 5))
 
 
-def create_post_url(num):
-    urls = open(post_url_path, "r")
-    for temp in urls:
-        url = temp.split(' ')[0]
-        post_token = temp.split(' ')[1]
-        index = open('url/index.txt', "r+")
-        for line in index:
+def create_post_url():
+    head = open('url/head.txt', 'r')
+    for line in head:
+        urls = open(post_url_path, "r")
+        for temp in urls:
+            url = temp.split(' ')[0].replace('www', line.strip())
+            print(url)
+            post_token = temp.split(' ')[1]
+            num = 0
+            now_time = datetime.datetime.now().strftime('%Y%m%d')  # 现在
             post_url = open('url/cache/' + post_url_path[4:], 'w+')
-            print('当前列表页为' + line)
-            for x in range(0, num):
-                value = rand_char()
-                now_time = datetime.datetime.now().strftime('%Y%m%d')  # 现在
-                post_url.write('http://' + url.strip('\n') + '/' + line.strip('\n') + now_time + value + '.html\n')
-            post_url.close()
+            while num < 1000:
+                index = open('url/index.txt', "r+")
+                for index_path in index:
+                    value = rand_char()
+                    target_url = 'http://' + url.strip('\n') + '/' + index_path.strip('\n') + now_time + value + '.html\n'
+                    post_url.write(target_url)
+                    num += 1
+                    # print(target_url, num)
+                    if num == 1000:
+                        index.close()
+                        break
+                index.close()
             post_all_url(post_token)
+        urls.close()
 
 
 # # 推送url到神马
@@ -59,8 +67,8 @@ def post_all_url(token):
         path = 'url/cache/' + post_url_path[4:]
         urls = open(path, 'r')
         url = urls.readline().split('/')[2]
-        post = 'curl "http://data.zhanzhang.sm.cn/push?site=' + url +\
-               '&user_name=914081010@qq.com&resource_name=mip_add&token=' + token + '" --data-binary @' + path
+        post = 'curl "http://data.zhanzhang.sm.cn/push?site=' + url + \
+               '&user_name=914081010@qq.com&resource_name=mip_add&token=' + token.strip() + '" --data-binary @' + path
         output = subprocess.Popen(post, shell=True, stdout=subprocess.PIPE)
         out, err = output.communicate()
         try:
@@ -85,16 +93,19 @@ def post_all_url(token):
 
 
 def main():
-    global post_frequency
-    while post_frequency > 0:
-        logger.debug('还需要推送 ' + str(post_frequency) + '次')
-        create_post_url(post_num_every_index)
-        time.sleep(60*post_frequency)
-        post_frequency -= 1
+    while True:
+        today = datetime.datetime.now().strftime('%Y%m%d')
+        create_post_url()
+        print('to do %s' % today)
+        while True:
+            time.sleep(1)
+            print('1 sec')
+            tomorrow = datetime.datetime.now().strftime('%Y%m%d')
+            if today != tomorrow:
+                break
 
 
 if __name__ == '__main__':
     main()
-
 
 

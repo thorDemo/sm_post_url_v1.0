@@ -6,16 +6,34 @@
 
   <code>示例: www.aiezhi.com TI_f3c27b588b703fe9074833dbec925913</code>
 
-* 推送结果还可以通过 /log/my_log.log 查看推送结果 
-
-* 添加了推送频率控制
-
-  <code>post_url_path = 'url/token.txt'                 # 推送哪些url</code>
-  <code>post_num_every_index = 2000                     # 每次每个目录推送多少条数据，最大值是2000 </code>
-  <code>post_frequency = 10                             # 推送延迟每隔离多少分钟推送一次,单位分钟 m </code>
+* 泛域名 添加目录在 /url/head.txt 文件中 
+  一定要添加 www 在头部
+  <code>
+      示例: www
+            feel
+            seem
+            how
+            high
+  </code>
   
 * 列表页配置目录 /url/index.txt
+ <code>
+      示例: html/
+            news/
+            show/
+            read/
+  </code>
 
+* 推送频率固定 一天一次
+
+* 推送日志在 log/my_log.log
+    示例：
+    <code>
+    2018-12-21 18:58:50,892 - __main__ - INFO - 提交成功 post = www.mindfuledu.cn
+    2018-12-21 18:58:53,702 - __main__ - INFO - 提交成功 post = www.nodigi.cn
+    2018-12-21 18:58:56,482 - __main__ - INFO - 提交成功 post = www.openc.cn
+    2018-12-21 18:59:01,685 - __main__ - INFO - 提交成功 post = www.ganluwang.cn
+    </code>
 * 安装环境需求 python3.6 anaconda3/2
 
     <code>conda install subprocess</code>
