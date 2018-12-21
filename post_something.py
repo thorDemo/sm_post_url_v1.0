@@ -49,15 +49,16 @@ def create_post_url():
                 index = open('url/index.txt', "r+")
                 for index_path in index:
                     value = rand_char()
-                    target_url = 'http://' + url.strip('\n') + '/' + index_path.strip('\n') + now_time + value + '.html\n'
+                    target_url = 'http://' + url.strip('\n') + '/' + index_path.strip('\n') + \
+                                 now_time + value + '.html\n'
                     post_url.write(target_url)
                     num += 1
-                    # print(target_url, num)
                     if num == 1000:
                         index.close()
                         break
                 index.close()
             post_all_url(post_token)
+            time.sleep(2)
         urls.close()
 
 
@@ -73,9 +74,6 @@ def post_all_url(token):
         output = subprocess.Popen(post, shell=True, stdout=subprocess.PIPE)
         out, err = output.communicate()
         try:
-            # print(out.splitlines()[2])
-            # for line in out.splitlines():
-            #     print(line)
             if out.splitlines()[2] == b'  200':
                 print('提交成功 post = ' + url)
                 logger.info('提交成功 post = ' + url)
@@ -86,8 +84,11 @@ def post_all_url(token):
                 break
             else:
                 temp += 1
+                for line in out.splitlines():
+                    print(line)
                 print('提交失败重试！')
                 logger.debug('提交失败重试！')
+                time.sleep(5)
         except IndexError as e:
             logger.debug(e)
             time.sleep(3)
