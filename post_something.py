@@ -7,6 +7,7 @@ import logging
 import datetime
 from random import sample
 import time
+import os
 # 参数定义
 # ————————————
 post_url_path = 'url/token.txt'                 # 推送哪些url
@@ -93,6 +94,8 @@ def post_all_url(token):
 
 
 def main():
+    if os.path.exists('url/cache/') is not True:
+        os.mkdir('url/cache')
     while True:
         today = datetime.datetime.now().strftime('%Y%m%d')
         create_post_url()
