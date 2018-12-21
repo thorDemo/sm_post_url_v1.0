@@ -101,11 +101,11 @@ def main():
         os.mkdir('url/cache')
     while True:
         today = datetime.datetime.now().strftime('%Y%m%d')
-        create_post_url()
         print('to do %s' % today)
+        create_post_url()
         while True:
-            time.sleep(1)
-            print('1 sec')
+            time.sleep(60 * 10)
+            print('10 min')
             tomorrow = datetime.datetime.now().strftime('%Y%m%d')
             if today != tomorrow:
                 break
