@@ -8,8 +8,12 @@ import datetime
 from random import sample
 import time
 import os
+from configparser import ConfigParser
 # 参数定义
 # ————————————
+config = ConfigParser()
+config.read('config.ini', 'utf-8')
+user = config.get('post', 'user')
 post_url_path = 'url/token.txt'                 # 推送哪些url
 # ————————————
 # ————————————
@@ -35,31 +39,29 @@ def rand_char():
 
 
 def create_post_url():
-    head = open('url/head.txt', 'r')
-    for line in head:
-        urls = open(post_url_path, "r")
-        for temp in urls:
-            url = temp.split(' ')[0].replace('www', line.strip())
-            print(url)
-            post_token = temp.split(' ')[1]
-            num = 0
-            now_time = datetime.datetime.now().strftime('%Y%m%d')  # 现在
-            post_url = open('url/cache/' + post_url_path[4:], 'w+')
-            while num < 1000:
-                index = open('url/index.txt', "r+")
-                for index_path in index:
-                    value = rand_char()
-                    target_url = 'http://' + url.strip('\n') + '/' + index_path.strip('\n') + \
-                                 now_time + value + '.html\n'
-                    post_url.write(target_url)
-                    num += 1
-                    if num == 1000:
-                        index.close()
-                        break
-                index.close()
-            post_all_url(post_token)
-            time.sleep(2)
-        urls.close()
+    urls = open(post_url_path, "r")
+    for temp in urls:
+        url = temp.split(' ')[0]
+        print(url)
+        post_token = temp.split(' ')[1]
+        num = 0
+        now_time = datetime.datetime.now().strftime('%Y%m%d')  # 现在
+        post_url = open('url/cache/' + post_url_path[4:], 'w+')
+        while num < 2000:
+            index = open('url/index.txt', "r+")
+            for index_path in index:
+                value = rand_char()
+                target_url = 'http://' + url.strip('\n') + '/' + index_path.strip('\n') + \
+                             now_time + value + '.html\n'
+                post_url.write(target_url)
+                num += 1
+                if num == 2000:
+                    index.close()
+                    break
+            index.close()
+        post_all_url(post_token)
+        time.sleep(2)
+    urls.close()
 
 
 # # 推送url到神马
@@ -70,7 +72,7 @@ def post_all_url(token):
         urls = open(path, 'r')
         url = urls.readline().split('/')[2]
         post = 'curl "http://data.zhanzhang.sm.cn/push?site=' + url + \
-               '&user_name=914081010@qq.com&resource_name=mip_add&token=' + token.strip() + '" --data-binary @' + path
+               '&user_name=' + user + '&resource_name=mip_add&token=' + token.strip() + '" --data-binary @' + path
         output = subprocess.Popen(post, shell=True, stdout=subprocess.PIPE)
         out, err = output.communicate()
         try:

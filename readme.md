@@ -10,17 +10,6 @@
         www.aiezhi.com TI_f3c27b588b703fe9074833dbec925913
         
    </code>
-
-* 泛域名 添加目录在 /url/head.txt 文件中 一定要添加 www 在头部
-  <code>
-      示例: 
-      
-      www
-      feel
-      seem
-      how
-      high
-  </code>
   
 * 列表页配置目录 /url/index.txt
   <code>
@@ -30,7 +19,9 @@
       news/
       show/
       read/
-  </code>   
+  </code>  
+   
+* 添加神马站长账号 config.ini
 
 * 推送频率固定 一天一次
 
